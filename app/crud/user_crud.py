@@ -1,6 +1,5 @@
-from sqlalchemy import select
+from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import EmailStr
 
 from app.models.user import User
 from app.schemas import user_schema
@@ -10,6 +9,10 @@ async def get_user_by_id(session: AsyncSession, user_id: int):
 
 async def get_user_by_username(session: AsyncSession, username: str):
     query = select(User).filter(User.username == username)
+    return await session.scalar(query)
+
+async def get_user_by_email(session: AsyncSession, email: str):
+    query = select(User).filter(User.email == email)
     return await session.scalar(query)
 
 async def create_user(session: AsyncSession, user: user_schema.UserCreate, hashed_password: str):
@@ -26,6 +29,11 @@ async def change_password(session: AsyncSession, user: User, hashed_password: st
     await session.refresh(user)
     return {"message": "Password changed successfully"}
 
-async def get_user_by_email(session: AsyncSession, email: EmailStr):
-    query = select(User).filter(User.email == email)
-    return await session.scalar(query)
+async def check_user_exists(session: AsyncSession, username: str, email: str):
+    query = select(
+        exists().where(User.username == username).label("username_taken"),
+        exists().where(User.email == email).label("email_taken"),
+    )
+    result = await session.execute(query)
+    row = result.one()
+    return {"username_taken": row.username_taken, "email_taken": row.email_taken}

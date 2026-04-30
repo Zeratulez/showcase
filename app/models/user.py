@@ -17,8 +17,8 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str]
-    username: Mapped[str] = mapped_column(String(30))
+    email: Mapped[str] = mapped_column(unique=True)
+    username: Mapped[str] = mapped_column(String(30), unique=True)
     hashed_password: Mapped[str]
     is_active: Mapped[bool] = mapped_column(default=True)
 

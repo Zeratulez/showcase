@@ -16,15 +16,17 @@ router = APIRouter(
     tags=["auth"]
 )
 
-@router.post("/auth/login", response_model=user_schema.UserPydantic)
+@router.post("/auth/register", response_model=user_schema.UserPydantic)
 async def register(
     session: Annotated[AsyncSession, Depends(get_async_session)],
     user_data: Annotated[user_schema.UserCreate, Body()]
 ):
-    user = await user_crud.get_user_by_username(session, user_data.username)
-    hashed_password = hash_password(user_data.password)
-    if user is not None:
+    conflicts = await user_crud.check_user_exists(session, user_data.username, user_data.email)
+    if conflicts["username_taken"]:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with this nickname already exists")
+    if conflicts["email_taken"]:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with this email already exists")
+    hashed_password = hash_password(user_data.password)
     return await user_crud.create_user(session, user_data, hashed_password)
 
 @router.post("/auth/login", response_model=Token)

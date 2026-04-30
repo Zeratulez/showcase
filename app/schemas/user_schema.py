@@ -30,3 +30,8 @@ class UserInDB(UserBase):
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
+
+class ChangePassword(BaseModel):
+    """Schema to change user password"""
+    current_password: str
+    new_password: str
