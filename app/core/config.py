@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     DB_PORT: int = 5432
     DB_NAME: str
 
+    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_RATE_LIMIT_REQUESTS: int = 10
+    REDIS_RATE_LIMIT_WINDOW: int = 60
+
     @property
     def SYNC_DATABASE_URL(self) -> str:
         return f"postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
