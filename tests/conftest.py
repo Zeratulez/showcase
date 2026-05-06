@@ -1,5 +1,8 @@
 import pytest
 
+from fakeredis import FakeAsyncRedis
+from unittest.mock import patch
+
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 from httpx import ASGITransport, AsyncClient
@@ -38,3 +41,9 @@ async def client(db_session: AsyncSession):
         yield test_client
 
     app.dependency_overrides.clear()
+
+@pytest.fixture(autouse=True)
+async def mock_redis():
+    fake = FakeAsyncRedis(decode_responses=True)
+    with patch("app.core.redis_client.redis_client", fake):
+        yield fake
