@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.api.endpoints import auth, items, users
 from app.core.logging import setup_logging
-from app.middleware import redis_middleware, logging_middleware
+from app.middleware import logging_middleware, redis_middleware
 
 setup_logging(is_production=False)
 

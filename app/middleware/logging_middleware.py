@@ -1,7 +1,7 @@
 import time
 import uuid
-import structlog
 
+import structlog
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from structlog.contextvars import bind_contextvars, clear_contextvars

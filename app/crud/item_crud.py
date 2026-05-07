@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.item import Item
 from app.schemas import item_schema, user_schema
 
+
 async def get_item_by_id(session: AsyncSession, item_id: int):
     return await session.get(Item, item_id)
 

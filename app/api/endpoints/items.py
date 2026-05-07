@@ -1,14 +1,15 @@
 import json
-import structlog
 from typing import Annotated
-from fastapi import APIRouter, Query, Depends, HTTPException, status, Body
+
+import structlog
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_async_session
-from app.crud import item_crud
-from app.schemas import item_schema, user_schema
 from app.api.dependencies import get_current_user
 from app.core import redis_client
+from app.crud import item_crud
+from app.database import get_async_session
+from app.schemas import item_schema, user_schema
 
 router = APIRouter(
     tags=["items"]

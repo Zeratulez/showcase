@@ -1,9 +1,11 @@
 import time
+
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 from app.core import redis_client
 from app.core.config import settings
+
 
 async def rate_limit_middleware(request: Request, call_next):
     client_ip = request.client.host

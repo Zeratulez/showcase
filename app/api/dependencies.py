@@ -2,18 +2,17 @@ from typing import Annotated
 
 import jwt
 import structlog
-from jwt.exceptions import InvalidTokenError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.ext.asyncio import AsyncSession
+from jwt.exceptions import InvalidTokenError
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
-from app.database import get_async_session
 from app.core.config import settings
-from app.schemas.user_schema import UserInDB
-from app.crud.user_crud import get_user_by_username
 from app.core.security import verify_password
+from app.crud.user_crud import get_user_by_username
+from app.database import get_async_session
+from app.schemas.user_schema import UserInDB
 
 logger: structlog.stdlib.BoundLogger = structlog.get_logger()
 
