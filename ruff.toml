@@ -1,0 +1,10 @@
+target-version = "py313"
+
+[lint]
+select = ["E", "I"]
+
+ignore = ["E501", "F"]
+
+[lint.per-file-ignores]
+"tests/*" = ["E", "I"]
+"alembic/*" = ["E", "I"]
